@@ -1,0 +1,83 @@
+.note-editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+}
+
+.note-header {
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-title-input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  background-color: transparent;
+  border: none;
+  color: #e0e0e0;
+  outline: none;
+  margin-right: 1rem;
+}
+
+.save-button {
+  padding: 0.5rem 1rem;
+  background-color: #4096ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #1677ff;
+}
+
+.save-button:disabled {
+  background-color: #6c7a89;
+  cursor: default;
+}
+
+.editor-container {
+  flex: 1;
+  overflow: auto;
+}
+
+/* 覆盖编辑器默认样式 */
+.g-markdown-editor {
+  height: 100% !important;
+  border: none !important;
+}
+
+.g-markdown-editor .CodeMirror {
+  height: 100% !important;
+  font-size: 16px;
+}
+
+/* 暗色主题适配 */
+.g-markdown-editor .cm-s-default {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.g-markdown-editor .cm-s-default .CodeMirror-cursor {
+  border-left: 1px solid #e0e0e0;
+}
+
+.g-markdown-editor .cm-s-default .cm-header {
+  color: #4096ff;
+}
+
+.g-markdown-editor .cm-s-default .cm-link {
+  color: #4096ff;
+}
+
+.g-markdown-editor .cm-s-default .cm-url {
+  color: #6c7a89;
+}
