@@ -73,7 +73,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
       <div className="editor-container">
         {(() => {
           const editor = useMarkdownEditor({
-            value: content,
+            initialContent: content,
             onChange: handleContentChange,
             autoFocus: true,
             defaultMode: "edit",
@@ -81,7 +81,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
             locale: "zh",
             theme: "dark"
           });
-          return editor.render();
+          return editor.element;
         })()}
       </div>
     </div>
