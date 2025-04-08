@@ -81,7 +81,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
             locale: "zh",
             theme: "dark"
           });
-          return editor.view.dom;
+          return editor.dom;
         })()}
       </div>
     </div>
