@@ -59,14 +59,14 @@ const Sidebar = ({
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
     '1': true, // 默认展开根文件夹
   });
-  const { searchNotes, searchResults, searchTerm: contextSearchTerm } = useAppContext();
+  const { searchNotes, searchResults } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
   const [editingFolderName, setEditingFolderName] = useState('');
 
-  const toggleFolder = (folderId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleFolder = (folderId: string, _e: React.MouseEvent) => {
+    _e.stopPropagation();
     setExpandedFolders(prev => ({
       ...prev,
       [folderId]: !prev[folderId],
@@ -79,8 +79,8 @@ const Sidebar = ({
   };
   
   // 处理搜索输入变化
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleSearchChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = _e.target.value;
     setSearchTerm(value);
   };
   

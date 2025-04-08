@@ -7,6 +7,13 @@ import SettingsModal from '../Settings/SettingsModal';
 import { useAppContext } from '../../contexts/AppContext';
 import './MainLayout.css';
 
+interface Note {
+  id: string;
+  title: string;
+  content: string;
+  folderId: string;
+}
+
 interface MainLayoutProps {
   onLogout: () => void;
   onChangePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;

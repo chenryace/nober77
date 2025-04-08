@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 
+// 添加Node.js全局类型定义
+declare global {
+  var prisma: PrismaClient | undefined;
+}
+
 // 防止开发环境下创建多个PrismaClient实例
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+export const prisma = global.prisma || new PrismaClient();
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
