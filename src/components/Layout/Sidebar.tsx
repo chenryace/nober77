@@ -202,14 +202,14 @@ const Sidebar = ({
             </button>
             <button 
               className="folder-action-btn" 
-              onClick={(e) => handleCreateFolder(folder.id)}
+              onClick={(_e) => handleCreateFolder(folder.id)}
               title="新建子文件夹"
             >
               📁+
             </button>
             <button 
               className="folder-action-btn" 
-              onClick={(e) => handleCreateNote(folder.id)}
+              onClick={(_e) => handleCreateNote(folder.id)}
               title="新建笔记"
             >
               📝+

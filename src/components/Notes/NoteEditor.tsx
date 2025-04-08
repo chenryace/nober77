@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Editor from '@gravity-ui/markdown-editor';
+import { Editor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
 
