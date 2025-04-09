@@ -4,8 +4,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@prisma/client': '/node_modules/@prisma/client'
-    }
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   }
 })
