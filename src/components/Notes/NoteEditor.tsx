@@ -22,13 +22,6 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
-  
-  // 定义内容变更处理函数
-  const handleContentChange = (newContent: string) => {
-    setContent(newContent);
-    setUnsavedChanges(true);
-    onChange(newContent);
-  };
 
   const editor = useEditor({
     extensions: [
