@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
-  plugins: [react({
-    tsDecorators: true
-  })],
+  plugins: [react()],
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@prisma/client': path.resolve(__dirname, './node_modules/@prisma/client')
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   },
-  esbuild: {
-    loader: 'tsx',
-    include: /\.(tsx?|jsx)$/,
-    exclude: [],
+  optimizeDeps: {
+    include: ['@prisma/client']
   }
 })
