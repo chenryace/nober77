@@ -10,10 +10,20 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        body: JSON.stringify({ password })
+      })
+      // 处理响应
+    } catch (error) {
+      // 错误处理
+    }
+  }
+  setLoading(true);
+  setError('');
 
     try {
       // 连接到实际的API验证密码
