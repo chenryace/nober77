@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
-import { createMarkdownEditor } from '@gravity-ui/markdown-editor';
+import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
-
-// 创建编辑器实例
-const { MarkdownEditor } = createMarkdownEditor();
 
 interface Note {
   id: string;
@@ -24,10 +21,20 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const editor = useMarkdownEditor({
+    initialValue: content,
+    onChange: handleContentChange,
+    autoFocus: true,
+    defaultMode: 'edit',
+    placeholder: '开始编写笔记...',
+    locale: 'zh',
+    theme: 'dark'
+  });
 
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
+    editor.setValue(note.content);
     setUnsavedChanges(false);
   }, [note]);
 
@@ -35,7 +42,6 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     const newTitle = e.target.value;
     setTitle(newTitle);
     setUnsavedChanges(true);
-    // 不再自动保存标题，只在用户点击保存按钮时保存
   };
 
   const handleContentChange = (newContent: string) => {
@@ -44,7 +50,6 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   };
   
   const handleSave = () => {
-    // 保存标题和内容
     if (onTitleChange && title !== note.title) {
       onTitleChange(title);
     }
@@ -74,15 +79,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
         </button>
       </div>
       <div className="editor-container">
-        <MarkdownEditor
-          value={content}
-          onChange={handleContentChange}
-          autoFocus={true}
-          defaultMode="edit"
-          placeholder="开始编写笔记..."
-          locale="zh"
-          theme="dark"
-        />
+        {editor.render()}
       </div>
     </div>
   );
