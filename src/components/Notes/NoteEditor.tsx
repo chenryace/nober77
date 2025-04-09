@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import MarkdownEditor from '@gravity-ui/markdown-editor';
+import { createMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
+
+// 创建编辑器实例
+const { MarkdownEditor } = createMarkdownEditor();
 
 interface Note {
   id: string;
