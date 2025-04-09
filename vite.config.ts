@@ -3,15 +3,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      // 优化打包配置
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['@gravity-ui/uikit', '@gravity-ui/components']
-        }
-      }
+  resolve: {
+    alias: {
+      '@prisma/client': '/node_modules/@prisma/client'
     }
   }
 })
