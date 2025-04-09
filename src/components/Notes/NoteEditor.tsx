@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
+import { Editor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
 
@@ -21,45 +21,20 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const editorContainerRef = useRef<HTMLDivElement>(null);
   
   // 定义内容变更处理函数
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
     setUnsavedChanges(true);
+    onChange(newContent);
   };
-  
-  // 使用 useMarkdownEditor hook，修改属性名
-  const editor = useMarkdownEditor({
-    value: content,  // 使用 value 而不是 initialValue
-    onChange: handleContentChange,
-    autoFocus: true,
-    mode: 'edit',    // 使用 mode 而不是 defaultMode
-    placeholder: '开始编写笔记...',
-    locale: 'zh',
-    theme: 'dark'
-  });
 
   // 当笔记变更时更新编辑器内容
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
-    // 不再使用 editor.update 方法
     setUnsavedChanges(false);
   }, [note]);
-
-  // 挂载编辑器到DOM
-  useEffect(() => {
-    if (editorContainerRef.current && editor) {
-      // 清空容器
-      editorContainerRef.current.innerHTML = '';
-      // 将编辑器元素添加到容器中
-      const editorElement = editor.getElement();
-      if (editorElement) {
-        editorContainerRef.current.appendChild(editorElement);
-      }
-    }
-  }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -96,7 +71,17 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
           {unsavedChanges ? '保存' : '已保存'}
         </button>
       </div>
-      <div className="editor-container" ref={editorContainerRef}></div>
+      <div className="editor-container">
+        <Editor
+          defaultValue={content}
+          onChange={handleContentChange}
+          autoFocus
+          viewMode="edit"
+          placeholder="开始编写笔记..."
+          locale="zh"
+          theme="dark"
+        />
+      </div>
     </div>
   );
 };
