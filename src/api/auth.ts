@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client/index-browser';
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 import * as bcrypt from 'bcryptjs';
 
 // 验证用户密码

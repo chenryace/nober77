@@ -6,12 +6,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@prisma/client': path.resolve(__dirname, 'node_modules/@prisma/client')
+      // 移除特定的别名配置，使用默认解析
     }
   },
   build: {
-    rollupOptions: {
-      external: ['@prisma/client']
-    }
+    // 移除external配置，允许Prisma客户端被打包到最终构建中
   }
 })
