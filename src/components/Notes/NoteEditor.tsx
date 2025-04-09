@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import MarkdownEditor from '@gravity-ui/markdown-editor';
+// 修改导入方式，使用命名导入
+import { MarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
 
