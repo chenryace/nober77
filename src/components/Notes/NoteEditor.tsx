@@ -1,13 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-// 参考 Diplodoc 的导入方式
-import { createMarkdownEditor } from '@gravity-ui/markdown-editor';
+// 修改导入方式，使用 useMarkdownEditor
+import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
-
-// 创建编辑器实例
-const MarkdownEditor = createMarkdownEditor({
-  extensions: [], // 可以添加自定义扩展
-});
 
 interface Note {
   id: string;
@@ -29,16 +24,32 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   
+  // 定义内容变更处理函数
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
     setUnsavedChanges(true);
   };
+  
+  // 使用 useMarkdownEditor hook
+  const editor = useMarkdownEditor({
+    initialValue: content,
+    onChange: handleContentChange,
+    autoFocus: true,
+    defaultMode: 'edit',
+    placeholder: '开始编写笔记...',
+    locale: 'zh',
+    theme: 'dark'
+  });
 
+  // 当笔记变更时更新编辑器内容
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
+    if (editor) {
+      editor.update(note.content);
+    }
     setUnsavedChanges(false);
-  }, [note]);
+  }, [note, editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -76,28 +87,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
         </button>
       </div>
       <div className="editor-container" ref={editorRef}>
-        <MarkdownEditor.Editor
-          value={content}
-          onChange={handleContentChange}
-          autoFocus
-          viewMode="edit"
-          placeholder="开始编写笔记..."
-          locale="zh"
-          theme="dark"
-          height="100%"
-          spellCheck={false}
-          toolbarItems={[
-            'heading',
-            'font-style',
-            'list',
-            'link',
-            'table',
-            'code',
-            'quote',
-            'image',
-            'divider'
-          ]}
-        />
+        {editor && editor.render()}
       </div>
     </div>
   );
