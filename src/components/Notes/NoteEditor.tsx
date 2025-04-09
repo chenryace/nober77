@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
-// 修改导入方式
-import { MDEditor } from '@gravity-ui/markdown-editor/lib/bundle';
+import { useEffect, useState, useRef } from 'react';
+// 参考 Diplodoc 的导入方式
+import { createMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
+
+// 创建编辑器实例
+const MarkdownEditor = createMarkdownEditor({
+  extensions: [], // 可以添加自定义扩展
+});
 
 interface Note {
   id: string;
@@ -22,6 +27,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
   
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
@@ -69,15 +75,28 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
           {unsavedChanges ? '保存' : '已保存'}
         </button>
       </div>
-      <div className="editor-container">
-        <MDEditor
+      <div className="editor-container" ref={editorRef}>
+        <MarkdownEditor.Editor
           value={content}
           onChange={handleContentChange}
           autoFocus
-          defaultView="edit"
+          viewMode="edit"
           placeholder="开始编写笔记..."
           locale="zh"
           theme="dark"
+          height="100%"
+          spellCheck={false}
+          toolbarItems={[
+            'heading',
+            'font-style',
+            'list',
+            'link',
+            'table',
+            'code',
+            'quote',
+            'image',
+            'divider'
+          ]}
         />
       </div>
     </div>
