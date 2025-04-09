@@ -6,10 +6,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@prisma/client': path.resolve(__dirname, './node_modules/@prisma/client')
+      '@prisma/client': path.resolve(__dirname, 'node_modules/@prisma/client')
     }
   },
-  optimizeDeps: {
-    include: ['@prisma/client']
+  build: {
+    rollupOptions: {
+      external: ['@prisma/client']
+    }
   }
 })
