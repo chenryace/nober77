@@ -81,3 +81,17 @@
 .g-markdown-editor .cm-s-default .cm-url {
   color: #6c7a89;
 }
+
+/* 确保图片正常显示 */
+.embedded-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Tiptap编辑器样式 */
+.ProseMirror {
+  min-height: 200px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

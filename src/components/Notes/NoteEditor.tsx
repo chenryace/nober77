@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import MDEditor from '@gravity-ui/markdown-editor';
-import '@gravity-ui/markdown-editor/styles/bundle.css';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import './NoteEditor.css';
 
 interface Note {
@@ -29,12 +30,34 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     onChange(newContent);
   };
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image.configure({
+        inline: true,
+        HTMLAttributes: {
+          class: 'embedded-image',
+        },
+      }),
+    ],
+    content: note.content,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      setContent(html);
+      setUnsavedChanges(true);
+      onChange(html);
+    },
+  });
+
   // 当笔记变更时更新编辑器内容
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
     setUnsavedChanges(false);
-  }, [note]);
+    if (editor && !editor.isDestroyed) {
+      editor.commands.setContent(note.content);
+    }
+  }, [note, editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -72,15 +95,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
         </button>
       </div>
       <div className="editor-container">
-        <MDEditor
-          value={content}
-          onChange={handleContentChange}
-          autoFocus
-          defaultView="edit"
-          placeholder="开始编写笔记..."
-          locale="zh"
-          theme="dark"
-        />
+        <EditorContent editor={editor} />
       </div>
     </div>
   );
