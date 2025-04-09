@@ -40,35 +40,3 @@
     "vite": "^6.2.0"
   }
 }
-{
-  "dependencies": {
-    "@diplodoc/transform": "^4.0.0",
-    "@gravity-ui/components": "^2.0.0",
-    "@gravity-ui/markdown-editor": "^12.0.0",
-    "@gravity-ui/uikit": "^5.0.0",
-    "@prisma/client": "^5.10.0",
-    "bcryptjs": "^2.4.3",
-    "react": "^18.2.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^18.2.0",
-    "uuid": "^9.0.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.21.0",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/uuid": "^9.0.8",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.21.0",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^15.15.0",
-    "prisma": "^5.10.0",
-    "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
-  }
-}
