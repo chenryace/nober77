@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
@@ -21,11 +21,20 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Define handleContentChange before using it
+  const handleContentChange = (newContent: string) => {
+    setContent(newContent);
+    setUnsavedChanges(true);
+  };
+  
+  // Correct usage of useMarkdownEditor
   const editor = useMarkdownEditor({
-    initialValue: content,
+    value: content,
     onChange: handleContentChange,
     autoFocus: true,
-    defaultMode: 'edit',
+    mode: 'edit',
     placeholder: '开始编写笔记...',
     locale: 'zh',
     theme: 'dark'
@@ -34,18 +43,32 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
-    editor.setValue(note.content);
+    
+    // Update editor content when note changes
+    if (editor) {
+      editor.setValue?.(note.content) || editor.update?.(note.content);
+    }
+    
     setUnsavedChanges(false);
-  }, [note]);
+  }, [note, editor]);
+
+  // Mount editor to container
+  useEffect(() => {
+    if (editorContainerRef.current && editor) {
+      editorContainerRef.current.innerHTML = '';
+      editorContainerRef.current.appendChild(editor.getElement());
+    }
+    
+    return () => {
+      if (editor && editor.destroy) {
+        editor.destroy();
+      }
+    };
+  }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    setUnsavedChanges(true);
-  };
-
-  const handleContentChange = (newContent: string) => {
-    setContent(newContent);
     setUnsavedChanges(true);
   };
   
@@ -78,9 +101,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
           {unsavedChanges ? '保存' : '已保存'}
         </button>
       </div>
-      <div className="editor-container">
-        {editor.render()}
-      </div>
+      <div className="editor-container" ref={editorContainerRef}></div>
     </div>
   );
 };
