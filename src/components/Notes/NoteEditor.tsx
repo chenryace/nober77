@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-// 修改导入方式，使用命名导入
-import { MarkdownEditor } from '@gravity-ui/markdown-editor';
+import { useEffect, useState, useRef } from 'react';
+// 使用正确的导入方式
+import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
 
@@ -22,6 +22,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
   
   // 定义内容变更处理函数
   const handleContentChange = (newContent: string) => {
@@ -29,13 +30,46 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     setUnsavedChanges(true);
     onChange(newContent);
   };
+  
+  // 使用 useMarkdownEditor hook
+  const editor = useMarkdownEditor({
+    onChange: handleContentChange,
+    autoFocus: true,
+    mode: 'edit',
+    placeholder: '开始编写笔记...',
+    locale: 'zh',
+    theme: 'dark'
+  });
 
   // 当笔记变更时更新编辑器内容
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
+    
+    // 如果编辑器存在，更新内容
+    if (editor && editor.getValue() !== note.content) {
+      editor.setValue(note.content);
+    }
+    
     setUnsavedChanges(false);
-  }, [note]);
+  }, [note, editor]);
+
+  // 挂载编辑器到DOM
+  useEffect(() => {
+    if (editorContainerRef.current && editor) {
+      // 清空容器
+      editorContainerRef.current.innerHTML = '';
+      // 将编辑器元素添加到容器中
+      editorContainerRef.current.appendChild(editor.container);
+    }
+    
+    // 清理函数
+    return () => {
+      if (editor && editor.destroy) {
+        editor.destroy();
+      }
+    };
+  }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -72,17 +106,7 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
           {unsavedChanges ? '保存' : '已保存'}
         </button>
       </div>
-      <div className="editor-container">
-        <MarkdownEditor
-          defaultValue={content}
-          onChange={handleContentChange}
-          autoFocus
-          defaultView="edit"
-          placeholder="开始编写笔记..."
-          locale="zh"
-          theme="dark"
-        />
-      </div>
+      <div className="editor-container" ref={editorContainerRef}></div>
     </div>
   );
 };
