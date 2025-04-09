@@ -10,28 +10,32 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+  
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ password })
-      })
-      // 处理响应
-    } catch (error) {
-      // 错误处理
-    }
-  }
-  setLoading(true);
-  setError('');
+      });
+      
+      if (!res.ok) {
+        throw new Error('登录失败');
+      }
 
-    try {
-      // 连接到实际的API验证密码
-      const success = await onLogin(password);
+      const { success } = await res.json();
       if (!success) {
         setError('密码不正确');
+        return;
       }
-      // 如果成功，onLogin会处理重定向
+      
+      // 登录成功处理
+      onLogin(password);
     } catch (err) {
       setError('登录失败，请重试');
       console.error(err);
