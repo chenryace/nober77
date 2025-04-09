@@ -101,10 +101,47 @@
   height: auto;
 }
 
-/* 保留原有样式 */
-.note-editor {
-  height: 100%;
+/* 添加登录表单样式 */
+.login-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
   background-color: #1a1a1a;
+  color: #e0e0e0;
 }
+
+.login-form {
+  width: 300px;
+  padding: 2rem;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: #3a3a3a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #4096ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #1677ff;
+}
+
+/* ... 保留原有编辑器样式 ... */
