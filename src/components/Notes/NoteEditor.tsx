@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-// 使用正确的导入方式
 import { useMarkdownEditor } from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
@@ -31,9 +30,9 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     onChange(newContent);
   };
   
-  // 使用 useMarkdownEditor hook
+  // 使用 useMarkdownEditor hook，根据实际API调整参数
   const editor = useMarkdownEditor({
-    onChange: handleContentChange,
+    // 移除不支持的属性
     autoFocus: true,
     mode: 'edit',
     placeholder: '开始编写笔记...',
@@ -41,14 +40,46 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     theme: 'dark'
   });
 
+  // 设置编辑器内容和监听变化
+  useEffect(() => {
+    if (editor) {
+      // 设置初始内容
+      try {
+        // 使用编辑器实例的方法设置内容
+        const editorInstance = editor.getState().instance;
+        if (editorInstance && typeof editorInstance.setContent === 'function') {
+          editorInstance.setContent(content);
+        }
+        
+        // 添加内容变更监听
+        const unsubscribe = editor.subscribe('change', (newContent: string) => {
+          handleContentChange(newContent);
+        });
+        
+        return () => {
+          if (unsubscribe) unsubscribe();
+        };
+      } catch (error) {
+        console.error('编辑器设置内容失败:', error);
+      }
+    }
+  }, [editor]);
+
   // 当笔记变更时更新编辑器内容
   useEffect(() => {
     setTitle(note.title);
     setContent(note.content);
     
     // 如果编辑器存在，更新内容
-    if (editor && editor.getValue() !== note.content) {
-      editor.setValue(note.content);
+    if (editor) {
+      try {
+        const editorInstance = editor.getState().instance;
+        if (editorInstance && typeof editorInstance.setContent === 'function') {
+          editorInstance.setContent(note.content);
+        }
+      } catch (error) {
+        console.error('编辑器更新内容失败:', error);
+      }
     }
     
     setUnsavedChanges(false);
@@ -59,16 +90,17 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
     if (editorContainerRef.current && editor) {
       // 清空容器
       editorContainerRef.current.innerHTML = '';
-      // 将编辑器元素添加到容器中
-      editorContainerRef.current.appendChild(editor.container);
-    }
-    
-    // 清理函数
-    return () => {
-      if (editor && editor.destroy) {
-        editor.destroy();
+      
+      // 获取编辑器元素并添加到容器
+      try {
+        const editorElement = editor.getElement();
+        if (editorElement) {
+          editorContainerRef.current.appendChild(editorElement);
+        }
+      } catch (error) {
+        console.error('挂载编辑器失败:', error);
       }
-    };
+    }
   }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
