@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { Editor } from '@gravity-ui/markdown-editor';
+import { useEffect, useState } from 'react';
+import MarkdownEditor from '@gravity-ui/markdown-editor';
 import '@gravity-ui/markdown-editor/styles/bundle.css';
 import './NoteEditor.css';
 
@@ -72,11 +72,11 @@ const NoteEditor = ({ note, onChange, onTitleChange, onSave }: NoteEditorProps) 
         </button>
       </div>
       <div className="editor-container">
-        <Editor
+        <MarkdownEditor
           defaultValue={content}
           onChange={handleContentChange}
           autoFocus
-          viewMode="edit"
+          defaultView="edit"
           placeholder="开始编写笔记..."
           locale="zh"
           theme="dark"
