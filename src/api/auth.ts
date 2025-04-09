@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 // 验证用户密码
 export async function verifyPassword(password: string): Promise<boolean> {
